@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnQuest - Learning Activity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --color-bg: #f8f9fb;
+  --color-surface: #ffffff;
+  --color-border: #e8eaed;
+  --color-border-light: #f1f3f5;
+  --color-text: #1a1d21;
+  --color-text-secondary: #5f6368;
+  --color-text-muted: #9aa0a6;
+  --color-accent: #4f46e5;
+  --color-accent-light: #eef2ff;
+  --color-accent-hover: #4338ca;
+  --color-success: #0d9668;
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-error: #dc2626;
+  --color-error-bg: #fef2f2;
+  --color-error-border: #fecaca;
+  --color-xp: #d97706;
+  --color-xp-bg: #fffbeb;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.04);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo {
+  width: 32px; height: 32px;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  color: #fff;
+}
+.app-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.3px;
+}
+.xp-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-xp-bg);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #fde68a;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-xp);
+  transition: transform 0.2s ease;
+}
+.xp-display.pulse { animation: xpPulse 0.35s ease; }
+@keyframes xpPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.xp-dot {
+  width: 8px; height: 8px;
+  background: var(--color-xp);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Progress Bar ── */
+.progress-container {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--color-border-light);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+
+/* ── Main Content ── */
+.main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 24px 48px;
+}
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  max-width: 600px;
+  width: 100%;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card-body { padding: 32px; }
+
+/* ── Welcome Screen ── */
+.welcome-icon {
+  width: 56px; height: 56px;
+  background: var(--color-accent-light);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+}
+.welcome-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--color-text);
+  letter-spacing: -0.3px;
+}
+.welcome-sub {
+  font-size: 14px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  margin-bottom: 28px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Task Screen ── */
+.task-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.task-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--color-text);
+  letter-spacing: -0.2px;
+}
+.task-fact {
+  background: #f9fafb;
+  border-left: 3px solid var(--color-accent);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+.task-question {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--color-text);
+}
+.options { display: flex; flex-direction: column; gap: 8px; }
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: border-color 0.15s ease, background 0.15s ease;
+  text-align: left;
+  width: 100%;
+  font-family: var(--font);
+  line-height: 1.4;
+}
+.option-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+.option-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.option-btn:disabled { cursor: default; }
+.option-letter {
+  width: 28px; height: 28px;
+  background: var(--color-border-light);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.option-btn:hover:not(:disabled) .option-letter {
+  background: var(--color-accent);
+  color: #fff;
+}
+.option-btn.correct {
+  border-color: var(--color-success);
+  background: var(--color-success-bg);
+}
+.option-btn.correct .option-letter {
+  background: var(--color-success);
+  color: #fff;
+}
+.option-btn.wrong {
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
+}
+.option-btn.wrong .option-letter {
+  background: var(--color-error);
+  color: #fff;
+}
+.option-btn.dimmed { opacity: 0.45; }
+
+/* ── Feedback ── */
+.feedback {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.6;
+  display: none;
+}
+.feedback.correct-feedback {
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: #065f46;
+  display: block;
+}
+.feedback.wrong-feedback {
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  color: #991b1b;
+  display: block;
+}
+.feedback-label {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+/* ── XP Reward ── */
+.xp-reward {
+  margin-top: 14px;
+  text-align: center;
+  display: none;
+}
+.xp-reward.show { display: block; animation: xpRewardIn 0.35s ease; }
+@keyframes xpRewardIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.xp-reward-amount {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-xp);
+}
+.xp-reward-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ── Floating XP ── */
+.floating-xp {
+  position: fixed;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-xp);
+  pointer-events: none;
+  z-index: 100;
+  animation: floatUp 1s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-60px); }
+}
+
+/* ── Badge Toast ── */
+.badge-toast-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.badge-toast-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.badge-toast {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 32px 40px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.92);
+  transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+  max-width: 320px;
+  width: 90%;
+}
+.badge-toast-overlay.show .badge-toast {
+  transform: scale(1);
+}
+.badge-icon-large {
+  width: 64px; height: 64px;
+  background: var(--color-accent-light);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 16px;
+}
+.badge-toast-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+.badge-toast-desc {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-bottom: 20px;
+}
+.badge-dismiss {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.15s ease;
+}
+.badge-dismiss:hover { background: var(--color-accent-hover); }
+.badge-dismiss:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* ── Badge Shelf ── */
+.badge-shelf {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border-light);
+}
+.shelf-item { text-align: center; }
+.shelf-badge {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin: 0 auto 4px;
+  transition: all 0.25s ease;
+}
+.shelf-badge.locked {
+  background: var(--color-border-light);
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+.shelf-badge.unlocked {
+  background: var(--color-accent-light);
+  animation: badgeUnlock 0.4s ease;
+}
+@keyframes badgeUnlock {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.shelf-label {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.15s ease;
+}
+.btn-primary:hover { background: var(--color-accent-hover); }
+.btn-primary:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.btn-row { display: flex; justify-content: flex-end; margin-top: 24px; }
+
+/* ── Completion Screen ── */
+.completion-icon {
+  width: 56px; height: 56px;
+  background: var(--color-success-bg);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+}
+.completion-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+.completion-sub {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: #f9fafb;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+.final-badges {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.final-badge { text-align: center; }
+.final-badge-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 4px;
+}
+.final-badge-icon.locked {
+  background: var(--color-border-light);
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+.final-badge-name {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+.completion-note {
+  text-align: center;
+  background: #f9fafb;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.hidden { display: none !important; }
+
+@media (max-width: 480px) {
+  .card-body { padding: 24px 20px; }
+  .stats-row { grid-template-columns: 1fr; }
+  .header { padding: 0 16px; }
+  .progress-container { padding: 10px 16px; }
+  .main { padding: 24px 16px 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Badge Toast Overlay -->
+<div class="badge-toast-overlay" id="badgeOverlay">
+  <div class="badge-toast">
+    <div class="badge-icon-large" id="badgeEmoji"></div>
+    <div class="badge-toast-title" id="badgeToastTitle"></div>
+    <div class="badge-toast-desc" id="badgeToastDesc"></div>
+    <button class="badge-dismiss" id="badgeDismiss">Continue</button>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo">L</div>
+    <span class="app-name">LearnQuest</span>
+  </div>
+  <div class="xp-display" id="xpDisplay">
+    <span class="xp-dot"></span>
+    <span id="xpCount">0 XP</span>
+  </div>
+</header>
+
+<!-- Progress -->
+<div class="progress-container">
+  <span class="progress-label" id="progressLabel">Task 0 of 5</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="card">
+    <div class="card-body" id="cardBody"></div>
+  </div>
+</main>
+
+<script>
+const CONDITION = 'gamified';
+
+const TASKS = [
+  {
+    topic: 'The Speed of Light',
+    fact: 'Light travels at approximately 299,792 kilometres per second in a vacuum. At this speed, a beam of light could circle the Earth about 7.5 times in just one second. This constant, often written as <em>c</em>, plays a central role in Einstein\'s theory of relativity.',
+    question: 'Approximately how many times can light circle the Earth in one second?',
+    options: ['3.5 times', '7.5 times', '15 times', '25 times'],
+    correct: 1,
+    explanation: 'Light travels fast enough to circle the Earth roughly 7.5 times per second.'
+  },
+  {
+    topic: 'The Deep Ocean',
+    fact: 'The deepest known point in the ocean is the Challenger Deep in the Mariana Trench, reaching about 10,935 metres below sea level. This is deeper than Mount Everest is tall. The extreme pressure at this depth is over 1,000 times the atmospheric pressure at the surface.',
+    question: 'What is the approximate depth of the Challenger Deep?',
+    options: ['5,200 metres', '8,848 metres', '10,935 metres', '14,000 metres'],
+    correct: 2,
+    explanation: 'The Challenger Deep reaches approximately 10,935 metres below sea level.'
+  },
+  {
+    topic: 'Human Memory',
+    fact: 'Psychologist Hermann Ebbinghaus discovered the "forgetting curve," which shows that people forget roughly 50% of newly learned information within one hour if they do not actively review it. However, spaced repetition\u2014reviewing material at increasing intervals\u2014can dramatically improve long-term retention.',
+    question: 'According to the forgetting curve, how much new information is typically forgotten within one hour?',
+    options: ['About 20%', 'About 35%', 'About 50%', 'About 75%'],
+    correct: 2,
+    explanation: 'Ebbinghaus found that roughly 50% of new information is forgotten within the first hour without review.'
+  },
+  {
+    topic: 'Earth\'s Atmosphere',
+    fact: 'The Earth\'s atmosphere is divided into five main layers. The troposphere, where weather occurs, extends up to about 12 km. Above it lies the stratosphere, which contains the ozone layer. The boundary between these two layers is called the tropopause.',
+    question: 'Which atmospheric layer contains the ozone layer?',
+    options: ['Troposphere', 'Stratosphere', 'Mesosphere', 'Thermosphere'],
+    correct: 1,
+    explanation: 'The ozone layer is located in the stratosphere, the second layer of the atmosphere.'
+  },
+  {
+    topic: 'Sound and Music',
+    fact: 'Sound cannot travel through a vacuum because it needs a medium such as air, water, or solid material to propagate. Interestingly, sound travels about four times faster in water than in air, and even faster through steel\u2014at roughly 5,960 metres per second.',
+    question: 'How does the speed of sound in water compare to its speed in air?',
+    options: ['It is slower', 'It is about the same', 'It is about 4 times faster', 'It is about 10 times faster'],
+    correct: 2,
+    explanation: 'Sound travels approximately four times faster in water than in air.'
+  }
+];
+
+const BADGES = {
+  firstSteps: { emoji: '\u{1F31F}', title: 'First Steps',     desc: 'Complete your first task' },
+  halfway:    { emoji: '\u{26A1}',  title: 'Halfway There',    desc: 'Complete 3 out of 5 tasks' },
+  seeker:     { emoji: '\u{1F50D}', title: 'Knowledge Seeker', desc: 'Complete all 5 tasks' }
+};
+
+let currentTask = -1;
+let xp = 0;
+let correctCount = 0;
+let earnedBadges = new Set();
+let taskStartTime = 0;
+let sessionStartTime = Date.now();
+let taskTimes = [];
+let answers = [];
+let badgeQueue = [];
+
+const cardBody     = document.getElementById('cardBody');
+const xpDisplay    = document.getElementById('xpDisplay');
+const xpCountEl    = document.getElementById('xpCount');
+const progressFill = document.getElementById('progressFill');
+const progressLabel= document.getElementById('progressLabel');
+const badgeOverlay = document.getElementById('badgeOverlay');
+const badgeEmoji   = document.getElementById('badgeEmoji');
+const badgeToastTitle = document.getElementById('badgeToastTitle');
+const badgeToastDesc  = document.getElementById('badgeToastDesc');
+
+document.getElementById('badgeDismiss').addEventListener('click', dismissBadge);
+
+showWelcome();
+
+function showWelcome() {
+  progressLabel.textContent = 'Ready to begin';
+  progressFill.style.width = '0%';
+  cardBody.innerHTML = `
+    <div class="welcome-icon">\u{1F4D6}</div>
+    <h1 class="welcome-title">Welcome to LearnQuest</h1>
+    <p class="welcome-sub">
+      You are about to explore 5 short learning tasks covering interesting science and general knowledge topics.
+      Read each fact carefully and answer the question that follows.
+    </p>
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn-primary" onclick="startTasks()">Start Learning &rarr;</button>
+    </div>
+  `;
+}
+
+function startTasks() {
+  sessionStartTime = Date.now();
+  nextTask();
+}
+
+function nextTask() {
+  currentTask++;
+  if (currentTask >= TASKS.length) { showCompletion(); return; }
+  taskStartTime = Date.now();
+  const t = TASKS[currentTask];
+  progressFill.style.width = (currentTask / TASKS.length * 100) + '%';
+  progressLabel.textContent = `Task ${currentTask + 1} of ${TASKS.length}`;
+
+  const optionsHtml = t.options.map((opt, i) =>
+    `<button class="option-btn" onclick="selectAnswer(${i})" id="opt${i}">
+      <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+      <span>${opt}</span>
+    </button>`
+  ).join('');
+
+  cardBody.innerHTML = `
+    <div class="task-label">Task ${currentTask + 1}</div>
+    <h2 class="task-title">${t.topic}</h2>
+    <div class="task-fact">${t.fact}</div>
+    <p class="task-question">${t.question}</p>
+    <div class="options">${optionsHtml}</div>
+    <div class="feedback" id="feedback"></div>
+    <div class="xp-reward" id="xpReward">
+      <div class="xp-reward-amount" id="xpRewardAmount"></div>
+      <div class="xp-reward-sub">Experience Points Earned</div>
+    </div>
+    ${renderBadgeShelf()}
+    <div class="btn-row hidden" id="nextRow">
+      <button class="btn-primary" onclick="nextTask()">
+        ${currentTask < TASKS.length - 1 ? 'Next Task &rarr;' : 'Finish &rarr;'}
+      </button>
+    </div>
+  `;
+  const card = cardBody.closest('.card');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = '';
+}
+
+function selectAnswer(idx) {
+  const t = TASKS[currentTask];
+  const isCorrect = idx === t.correct;
+  const elapsed = Date.now() - taskStartTime;
+  taskTimes.push(elapsed);
+  answers.push({ task: currentTask, selected: idx, correct: t.correct, isCorrect, time: elapsed });
+
+  t.options.forEach((_, i) => {
+    const btn = document.getElementById('opt' + i);
+    btn.disabled = true;
+    if (i === t.correct) btn.classList.add('correct');
+    else if (i === idx && !isCorrect) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (isCorrect) {
+    correctCount++;
+    fb.className = 'feedback correct-feedback';
+    fb.innerHTML = `<div class="feedback-label">Correct</div>${t.explanation}`;
+  } else {
+    fb.className = 'feedback wrong-feedback';
+    fb.innerHTML = `<div class="feedback-label">Not quite</div>The correct answer is: <strong>${t.options[t.correct]}</strong>. ${t.explanation}`;
+  }
+
+  const xpEarned = 50;
+  xp += xpEarned;
+  animateXP(xpEarned);
+  updateXPCounter();
+
+  document.getElementById('xpRewardAmount').textContent = `+${xpEarned} XP`;
+  document.getElementById('xpReward').classList.add('show');
+
+  checkBadges();
+
+  setTimeout(() => {
+    document.getElementById('nextRow').classList.remove('hidden');
+  }, badgeQueue.length > 0 ? 500 : 600);
+}
+
+function animateXP(amount) {
+  const el = document.createElement('div');
+  el.className = 'floating-xp';
+  el.textContent = `+${amount}`;
+  const rect = xpDisplay.getBoundingClientRect();
+  el.style.left = (rect.left + rect.width / 2 - 16) + 'px';
+  el.style.top = (rect.bottom + 4) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+  xpDisplay.classList.add('pulse');
+  setTimeout(() => xpDisplay.classList.remove('pulse'), 350);
+}
+
+function updateXPCounter() {
+  xpCountEl.textContent = xp + ' XP';
+}
+
+function checkBadges() {
+  badgeQueue = [];
+  if (currentTask === 0 && !earnedBadges.has('firstSteps')) {
+    earnedBadges.add('firstSteps');
+    badgeQueue.push('firstSteps');
+  }
+  if (currentTask === 2 && !earnedBadges.has('halfway')) {
+    earnedBadges.add('halfway');
+    badgeQueue.push('halfway');
+  }
+  if (currentTask === TASKS.length - 1 && !earnedBadges.has('seeker')) {
+    earnedBadges.add('seeker');
+    badgeQueue.push('seeker');
+  }
+  if (badgeQueue.length > 0) setTimeout(() => showNextBadge(), 400);
+  updateBadgeShelf();
+}
+
+function showNextBadge() {
+  if (badgeQueue.length === 0) return;
+  const b = BADGES[badgeQueue.shift()];
+  badgeEmoji.textContent = b.emoji;
+  badgeToastTitle.textContent = b.title;
+  badgeToastDesc.textContent = b.desc;
+  badgeOverlay.classList.add('show');
+}
+
+function dismissBadge() {
+  badgeOverlay.classList.remove('show');
+  setTimeout(() => { if (badgeQueue.length > 0) showNextBadge(); }, 250);
+}
+
+function renderBadgeShelf() {
+  const keys = ['firstSteps', 'halfway', 'seeker'];
+  return `<div class="badge-shelf">${keys.map(k => {
+    const b = BADGES[k];
+    const unlocked = earnedBadges.has(k);
+    return `<div class="shelf-item">
+      <div class="shelf-badge ${unlocked ? 'unlocked' : 'locked'}" id="shelf-${k}">${b.emoji}</div>
+      <div class="shelf-label">${b.title}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function updateBadgeShelf() {
+  Object.keys(BADGES).forEach(k => {
+    const el = document.getElementById('shelf-' + k);
+    if (el && earnedBadges.has(k)) {
+      el.classList.remove('locked');
+      el.classList.add('unlocked');
+    }
+  });
+}
+
+function showCompletion() {
+  progressFill.style.width = '100%';
+  progressLabel.textContent = 'Completed';
+  const totalTime = Math.round((Date.now() - sessionStartTime) / 1000);
+  const mins = Math.floor(totalTime / 60);
+  const secs = totalTime % 60;
+  const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+
+  const badgeKeys = ['firstSteps', 'halfway', 'seeker'];
+  const badgesHtml = badgeKeys.map(k => {
+    const b = BADGES[k];
+    const unlocked = earnedBadges.has(k);
+    return `<div class="final-badge">
+      <div class="final-badge-icon ${unlocked ? '' : 'locked'}">${b.emoji}</div>
+      <div class="final-badge-name">${b.title}</div>
+    </div>`;
+  }).join('');
+
+  cardBody.innerHTML = `
+    <div class="completion-icon">\u{2714}\u{FE0E}</div>
+    <h1 class="completion-title">Activity Complete</h1>
+    <p class="completion-sub">You have completed all 5 learning tasks.</p>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">${correctCount}/${TASKS.length}</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${timeStr}</div>
+        <div class="stat-label">Time</div>
+      </div>
+    </div>
+    <div class="final-badges">${badgesHtml}</div>
+    <div class="completion-note">
+      You have completed the learning activity. Please continue to the next part of the study.
+    </div>
+  `;
+
+  const sessionData = {
+    condition: CONDITION, totalXP: xp, correctCount,
+    totalTasks: TASKS.length, totalTimeMs: Date.now() - sessionStartTime,
+    answers, taskTimes, earnedBadges: Array.from(earnedBadges)
+  };
+  console.log('SESSION_DATA', JSON.stringify(sessionData));
+  try { window.parent.postMessage({ type: 'learnquest-complete', data: sessionData }, '*'); } catch(e) {}
+}
+</script>
+</body>
+</html>
