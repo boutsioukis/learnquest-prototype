@@ -139,6 +139,44 @@ body {
   width: 0%;
 }
 
+/* ── XP Bar ── */
+.xp-bar-container {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.xp-bar-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-xp);
+  white-space: nowrap;
+  min-width: 62px;
+}
+.xp-bar-track {
+  flex: 1;
+  height: 10px;
+  background: #fef3c7;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #d97706);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+.xp-bar-max {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
 /* ── Main Content ── */
 .main {
   flex: 1;
@@ -564,6 +602,7 @@ body {
   .stats-row { grid-template-columns: 1fr; }
   .header { padding: 0 16px; }
   .progress-container { padding: 10px 16px; }
+  .xp-bar-container { padding: 10px 16px; }
   .main { padding: 24px 16px 40px; }
 }
 </style>
@@ -600,6 +639,15 @@ body {
   </div>
 </div>
 
+<!-- XP Bar -->
+<div class="xp-bar-container" id="xpBarContainer" style="display:none;">
+  <span class="xp-bar-label" id="xpBarLabel">0 XP</span>
+  <div class="xp-bar-track">
+    <div class="xp-bar-fill" id="xpBarFill"></div>
+  </div>
+  <span class="xp-bar-max">250 XP</span>
+</div>
+
 <!-- Main Content -->
 <main class="main">
   <div class="card">
@@ -614,42 +662,42 @@ const TASKS = [
   {
     topic: 'The Speed of Light',
     fact: 'Light travels at approximately 299,792 kilometres per second in a vacuum. At this speed, a beam of light could circle the Earth about 7.5 times in just one second. This constant, often written as <em>c</em>, plays a central role in Einstein\'s theory of relativity.',
-    question: 'Approximately how many times can light circle the Earth in one second?',
-    options: ['3.5 times', '7.5 times', '15 times', '25 times'],
+    question: 'The Moon is roughly 384,400 km from Earth. Based on the speed of light, approximately how long would it take a laser beam to reach the Moon?',
+    options: ['About 0.05 seconds', 'About 1.3 seconds', 'About 8.3 minutes', 'About 1.3 minutes'],
     correct: 1,
-    explanation: 'Light travels fast enough to circle the Earth roughly 7.5 times per second.'
+    explanation: 'Dividing 384,400 km by 299,792 km/s gives approximately 1.28 seconds\u2014just over one second for light to travel from Earth to the Moon.'
   },
   {
     topic: 'The Deep Ocean',
     fact: 'The deepest known point in the ocean is the Challenger Deep in the Mariana Trench, reaching about 10,935 metres below sea level. This is deeper than Mount Everest is tall. The extreme pressure at this depth is over 1,000 times the atmospheric pressure at the surface.',
-    question: 'What is the approximate depth of the Challenger Deep?',
-    options: ['5,200 metres', '8,848 metres', '10,935 metres', '14,000 metres'],
+    question: 'If Mount Everest (8,848 m tall) were placed at the bottom of the Challenger Deep, approximately how much water would still remain above its peak?',
+    options: ['About 200 metres', 'About 1,100 metres', 'About 2,100 metres', 'About 4,000 metres'],
     correct: 2,
-    explanation: 'The Challenger Deep reaches approximately 10,935 metres below sea level.'
+    explanation: 'The Challenger Deep is 10,935 m deep and Everest is 8,848 m tall, so 10,935 \u2212 8,848 = 2,087 m of water would remain above the summit\u2014roughly 2,100 metres.'
   },
   {
     topic: 'Human Memory',
     fact: 'Psychologist Hermann Ebbinghaus discovered the "forgetting curve," which shows that people forget roughly 50% of newly learned information within one hour if they do not actively review it. However, spaced repetition\u2014reviewing material at increasing intervals\u2014can dramatically improve long-term retention.',
-    question: 'According to the forgetting curve, how much new information is typically forgotten within one hour?',
-    options: ['About 20%', 'About 35%', 'About 50%', 'About 75%'],
+    question: 'Based on the forgetting curve, which study strategy would most effectively combat memory loss over time?',
+    options: ['Studying everything in one long session the night before', 'Re-reading all notes in a single sitting', 'Reviewing material at gradually increasing intervals', 'Highlighting key sentences while reading the text'],
     correct: 2,
-    explanation: 'Ebbinghaus found that roughly 50% of new information is forgotten within the first hour without review.'
+    explanation: 'Spaced repetition\u2014reviewing at gradually increasing intervals\u2014directly counteracts the forgetting curve by reinforcing memories before they fade.'
   },
   {
     topic: 'Earth\'s Atmosphere',
     fact: 'The Earth\'s atmosphere is divided into five main layers. The troposphere, where weather occurs, extends up to about 12 km. Above it lies the stratosphere, which contains the ozone layer. The boundary between these two layers is called the tropopause.',
-    question: 'Which atmospheric layer contains the ozone layer?',
-    options: ['Troposphere', 'Stratosphere', 'Mesosphere', 'Thermosphere'],
+    question: 'An aircraft flying at 14 km altitude has crossed the tropopause. What is true about its current position?',
+    options: ['It is in the troposphere, where most weather occurs', 'It is in the stratosphere, above most weather systems', 'It is in the mesosphere, where meteors burn up', 'It is at the boundary between the stratosphere and mesosphere'],
     correct: 1,
-    explanation: 'The ozone layer is located in the stratosphere, the second layer of the atmosphere.'
+    explanation: 'The tropopause (at about 12 km) marks the top of the troposphere. At 14 km the aircraft has crossed into the stratosphere, which sits above most weather systems and contains the ozone layer.'
   },
   {
     topic: 'Sound and Music',
     fact: 'Sound cannot travel through a vacuum because it needs a medium such as air, water, or solid material to propagate. Interestingly, sound travels about four times faster in water than in air, and even faster through steel\u2014at roughly 5,960 metres per second.',
-    question: 'How does the speed of sound in water compare to its speed in air?',
-    options: ['It is slower', 'It is about the same', 'It is about 4 times faster', 'It is about 10 times faster'],
-    correct: 2,
-    explanation: 'Sound travels approximately four times faster in water than in air.'
+    question: 'A diver underwater and a person standing on the deck of a ship both hear an explosion at the same distance. Who perceives the sound first, and why?',
+    options: ['The person on deck, because air is less dense and carries sound more easily', 'The diver, because sound propagates faster through water than through air', 'They perceive it at the same time, because distance is the same', 'The person on deck, because water absorbs more sound energy'],
+    correct: 1,
+    explanation: 'Sound travels about four times faster in water than in air, so the diver would perceive the sound first despite both being at the same distance.'
   }
 ];
 
@@ -669,11 +717,15 @@ let taskTimes = [];
 let answers = [];
 let badgeQueue = [];
 
+const MAX_XP = 250; // 5 tasks x 50 XP
 const cardBody     = document.getElementById('cardBody');
 const xpDisplay    = document.getElementById('xpDisplay');
 const xpCountEl    = document.getElementById('xpCount');
 const progressFill = document.getElementById('progressFill');
 const progressLabel= document.getElementById('progressLabel');
+const xpBarContainer = document.getElementById('xpBarContainer');
+const xpBarFill    = document.getElementById('xpBarFill');
+const xpBarLabel   = document.getElementById('xpBarLabel');
 const badgeOverlay = document.getElementById('badgeOverlay');
 const badgeEmoji   = document.getElementById('badgeEmoji');
 const badgeToastTitle = document.getElementById('badgeToastTitle');
@@ -701,6 +753,7 @@ function showWelcome() {
 
 function startTasks() {
   sessionStartTime = Date.now();
+  xpBarContainer.style.display = '';
   nextTask();
 }
 
@@ -798,6 +851,8 @@ function animateXP(amount) {
 
 function updateXPCounter() {
   xpCountEl.textContent = xp + ' XP';
+  xpBarLabel.textContent = xp + ' XP';
+  xpBarFill.style.width = Math.min((xp / MAX_XP) * 100, 100) + '%';
 }
 
 function checkBadges() {
